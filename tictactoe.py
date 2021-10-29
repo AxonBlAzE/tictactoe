@@ -47,3 +47,55 @@ def movesLeft(board):
             if board[i][j] == '-':
                 return True
     return False
+
+def minmax(isMaximising,board):
+    score = checkWinner(board)
+
+    # human is winner
+    if score == 1:
+        return score
+    
+    # ai is winner
+    if score == -1:
+        return score
+
+    # tie
+    if movesLeft(board) == False:
+        return 0
+
+    if(isMaximising):
+        best_score = min_int
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == '-':
+                    board[i][j] = human
+                    score = minmax(False,board)
+                    board[i][j] = '-'
+                    if score > best_score:
+                        best_score = score
+        return best_score
+
+    else:
+        best_score = max_int
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == '-':
+                    board[i][j] = ai
+                    score = minmax(True,board)
+                    board[i][j] = '-'
+                    if score < best_score:
+                        best_score = score
+        return best_score 
+
+def findBestMove(board):
+    best_score = max_int
+    for i in range(3):
+            for j in range(3):
+                if board[i][j] == '-':
+                    board[i][j] = ai
+                    score = minmax(True,board)
+                    board[i][j] = '-'
+                    if score < best_score:
+                        best_score = score
+                        move = Move(i,j)
+    return move 

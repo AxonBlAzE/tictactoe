@@ -99,3 +99,61 @@ def findBestMove(board):
                         best_score = score
                         move = Move(i,j)
     return move 
+
+def chooseMoveHuman(board):
+    if movesLeft(board) == False:
+        return
+    else:
+        row, col = list(
+                map(int, input("\nEnter row and column numbers to fix spot: ").split()))
+        print()
+        coordinates = Move(row,col)
+        if board[coordinates.row][coordinates.col] != '-':
+            print('This cell is not empty')
+            chooseMoveHuman(board)
+        else:
+            board[coordinates.row][coordinates.col] = 'X'
+        # best_move = Move()
+        if movesLeft(board):
+            best_move = findBestMove(board)
+        else:
+            for i in range(3):
+                for j in range(3):
+                    print(str(board[i][j]),end=" ")
+                print()
+            return
+
+        board[best_move.row][best_move.col] = 'O'
+        for i in range(3):
+                for j in range(3):
+                    print(str(board[i][j]),end=" ")
+                print()
+        score = checkWinner(board)
+        if score == 1 or score == -1:
+            return
+        
+        chooseMoveHuman(board)
+
+def main():
+    board = [
+        [ '-', '-', '-' ],
+        [ '-', '-', '-' ],
+        [ '-', '-', '-' ]
+    ]
+
+    print('Start State: ')
+    for i in range(3):
+        for j in range(3):
+            print(str(board[i][j]),end=" ")
+        print()
+
+    chooseMoveHuman(board)
+    score = checkWinner(board)
+    if score == 0:
+        print("\nTie!")
+    elif score == 1:
+        print("\nHuman Wins!")
+    else:
+        print("\nAI Wins!")
+
+main()
